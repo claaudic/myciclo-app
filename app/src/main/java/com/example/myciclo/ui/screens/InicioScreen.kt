@@ -24,7 +24,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun InicioScreen(
-    onNuevoRegistro: () -> Unit
+    diaDelCiclo: Int?,
+    onNuevoRegistro: () -> Unit,
+    onRegistroEva: () -> Unit,
+    onCalendario: () -> Unit,
+    onHistorial: () -> Unit,
+    onAprender: () -> Unit
 ) {
 
 
@@ -50,6 +55,16 @@ fun InicioScreen(
             text = "Tu bitácora de seguimiento",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Día del ciclo calculado desde el último inicio de período (nunca ingresado a mano)
+        Text(
+            text = if (diaDelCiclo != null) "Día $diaDelCiclo del ciclo"
+            else "Registra el inicio de tu período para ver el día de tu ciclo",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -104,9 +119,22 @@ fun InicioScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Botón registro EVA (opcional)
+        OutlinedButton(
+            onClick = onRegistroEva,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text("Registro EVA (opcional)")
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         // Botón calendario
         OutlinedButton(
-            onClick = { },
+            onClick = onCalendario,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
@@ -119,7 +147,7 @@ fun InicioScreen(
 
         // Botón historial
         OutlinedButton(
-            onClick = { },
+            onClick = onHistorial,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
@@ -130,9 +158,9 @@ fun InicioScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Botón educación
+        // Botón educación (ruta Aprender)
         OutlinedButton(
-            onClick = { },
+            onClick = onAprender,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
