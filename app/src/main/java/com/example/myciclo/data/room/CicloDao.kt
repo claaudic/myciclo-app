@@ -3,6 +3,7 @@ package com.example.myciclo.data.room
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CicloDao {
 
-    @Insert
+    // Si ya existe un ciclo con esa fecha de inicio, no se duplica.
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertar(ciclo: CicloEntity): Long
 
     @Update
