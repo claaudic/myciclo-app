@@ -3,9 +3,8 @@ package com.example.myciclo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.*
-import com.example.myciclo.ui.screens.InicioScreen
-import com.example.myciclo.ui.screens.RegistroScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.myciclo.navigation.Navigation
 import com.example.myciclo.ui.theme.MyCicloTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,31 +16,10 @@ class MainActivity : ComponentActivity() {
 
             MyCicloTheme {
 
-                var pantalla by remember {
-                    mutableStateOf("inicio")
-                }
+                // Las rutas y pantallas están centralizadas en navigation/Navigation.kt
+                val navController = rememberNavController()
 
-                when (pantalla) {
-
-                    "inicio" -> {
-                        InicioScreen(
-                            onNuevoRegistro = {
-                                pantalla = "registro"
-                            }
-                        )
-                    }
-
-                    "registro" -> {
-                        RegistroScreen(
-                            onVolver = {
-                                pantalla = "inicio"
-                            },
-                            onGuardar = {
-                                pantalla = "inicio"
-                            }
-                        )
-                    }
-                }
+                Navigation(navController = navController)
             }
         }
     }
