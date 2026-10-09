@@ -2,37 +2,42 @@ package com.example.myciclo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Paleta "Blanco y dorado" (versión B), con colores de myciclo.cl.
-// Fondo blanco; el dorado solo marca lo importante.
-// Cuando llegue el manual de marca, se ajustan los tonos aquí.
+// Paleta oficial de los mockups "myCiclo · Pantallas de la app".
+// Fondo blanco; cada color tiene una función (marca, período, EVA, acento, estados).
 
-// Marca principal: dorado oscuro para botones (el texto blanco se lee bien)
-val MyCicloPrimary = Color(0xFF8A6A2C)
-val MyCicloPrimaryDark = Color(0xFF6E5220)
-val MyCicloPrimarySoft = Color(0xFFF7F0E2)   // chip seleccionado
-
-// Dorado de la web: número del día, progreso y detalles
-val MyCicloGold = Color(0xFFB68D40)
-val MyCicloGoldSoft = Color(0xFFF5EFE3)
+// Morado de marca: botones principales, títulos y día de hoy
+val MyCicloPrimary = Color(0xFF2D055B)
+val MyCicloPrimaryDark = Color(0xFF1E0340)
+val MyCicloPrimarySoft = Color(0xFFF3EEF9)   // fondo de lo seleccionado
 
 // Período
-val MyCicloPink = Color(0xFFD9577F)
-val MyCicloPinkSoft = Color(0xFFFCEBF0)
+val MyCicloPink = Color(0xFFD6457A)
+val MyCicloPinkText = Color(0xFFB02A5E)      // texto rosado sobre fondo rosado suave
+val MyCicloPinkSoft = Color(0xFFFCE8EF)
 
-// EVA (ciruela de la web)
-val MyCicloPlum = Color(0xFF6D186D)
-val MyCicloPlumSoft = Color(0xFFF4E9F4)
+// EVA
+val MyCicloEva = Color(0xFF6A4BA8)
+val MyCicloEvaSoft = Color(0xFFEEE7F7)       // tarjeta y franja de la ventana EVA
+
+// Dorado: acento y marca de "día con registro"
+val MyCicloGold = Color(0xFFC4963C)
+val MyCicloGoldText = Color(0xFF8C6520)      // texto dorado (se lee mejor)
+val MyCicloGoldSoft = Color(0xFFFBF7EE)      // crema: superficies suaves
 
 // Fondos y bordes
 val MyCicloBackground = Color(0xFFFFFFFF)
 val MyCicloSurface = Color(0xFFFFFFFF)
-val MyCicloSurfaceSoft = Color(0xFFFAF8F5)
-val MyCicloBorder = Color(0xFFECE7DE)
+val MyCicloSurfaceSoft = Color(0xFFFBF7EE)
+val MyCicloBorder = Color(0xFFECE6F1)
 
 // Texto
-val MyCicloText = Color(0xFF181210)
-val MyCicloTextSecondary = Color(0xFF7A7168)
+val MyCicloText = Color(0xFF1E1430)
+val MyCicloTextSecondary = Color(0xFF6B6378)
 
 // Estados
 val MyCicloError = Color(0xFFB3261E)
-val MyCicloSuccess = Color(0xFF4F7457)
+val MyCicloErrorSoft = Color(0xFFFCEDEC)
+val MyCicloSuccess = Color(0xFF2E7D5B)
+val MyCicloSuccessSoft = Color(0xFFE8F4EE)
+val MyCicloDisabled = Color(0xFFE9E5EE)
+val MyCicloDisabledText = Color(0xFF8A8296)
