@@ -214,3 +214,37 @@ Cuando llegue el manual de marca, los tonos se ajustan solo en `Color.kt`.
 2. En Android Studio, abrir `BienvenidaScreen.kt` → *Split* para ver la vista previa.
 
 **Verificado:** `./gradlew assembleDebug` y `./gradlew test` sin errores.
+
+---
+
+## 2026-10-09 · Onboarding · Paso 1 (tarjeta Trello)
+
+**Objetivo:** primer paso del onboarding, "¿Qué te gustaría conocer de tu ciclo?", con selección múltiple en tarjetas, y la ruta desde Bienvenida.
+
+**Archivos nuevos**
+
+| Archivo | Para qué |
+|---|---|
+| `viewmodel/OnboardingViewModel.kt` | `OnboardingUiState` (paso actual y objetivos elegidos) expuesto con `StateFlow`. La regla "Continuar deshabilitado sin selección" está en `puedeContinuar`, no en la pantalla. Funciones `onObjetivoClick`, `continuar` y `pasoAnterior`. |
+| `ui/screens/OnboardingScreen.kt` | Cabecera (logo + "PASO X DE 5"), barra de pasos, contenido del paso con `AnimatedContent` (el paso nuevo entra desde la derecha en 300 ms; al volver, desde la izquierda) y botón "Continuar". Los pasos 2 a 5 muestran "Próximamente" hasta su tarjeta. El botón atrás del teléfono vuelve al paso anterior (`BackHandler`). |
+| `ui/components/TarjetaSeleccionable.kt` | Tarjeta con ícono, título, subtítulo y casilla. Seleccionada = borde morado 2 dp + fondo morado suave + ✓ (animado 150 ms). Usa `toggleable` con rol de casilla para accesibilidad. |
+| `ui/components/BarraPasos.kt` | Barra de 5 segmentos; los completados se pintan morados con animación de 300 ms. |
+| `ui/components/Logo.kt` | `LogoMyCiclo` ("my" rosado, "Ciclo" morado). Se movió desde Bienvenida para usarlo en ambas pantallas. |
+| `res/drawable/ic_patrones.xml`, `ic_emocion.xml`, `ic_eva.xml` | Íconos de las 3 opciones. |
+| `test/.../OnboardingViewModelTest.kt` | 5 pruebas unitarias del Paso 1 (sin selección no avanza, con selección sí, tocar dos veces desmarca). |
+
+**Archivos modificados**
+
+| Archivo | Cambio |
+|---|---|
+| `navigation/Navigation.kt` (compartido, aprobado) | Nueva ruta `Rutas.ONBOARDING`. "Comenzar" de Bienvenida ahora va al Onboarding. Al terminar el onboarding se va a Inicio y se quitan Bienvenida y Onboarding del historial (`popUpTo` con `inclusive = true`). No se tocaron las rutas de Cristopher ni de Nicolas. |
+| `ui/screens/BienvenidaScreen.kt` | Usa `LogoMyCiclo` del nuevo archivo `Logo.kt`. |
+
+**Cómo probar**
+1. Ejecutar la app → "Comenzar" → aparece el Paso 1.
+2. Sin elegir nada, "Continuar" está gris y no hace nada.
+3. Tocar una tarjeta: borde morado, fondo suave y ✓. Tocarla otra vez la desmarca.
+4. "Continuar" → el Paso 2 entra desde la derecha y la barra avanza.
+5. Botón atrás del teléfono → vuelve al Paso 1 con la selección intacta.
+
+**Verificado:** `./gradlew assembleDebug` y `./gradlew test` (5 pruebas nuevas) sin errores.

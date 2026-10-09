@@ -12,13 +12,16 @@ import com.example.myciclo.ui.screens.CalendarioScreen
 import com.example.myciclo.ui.screens.HistorialScreen
 import com.example.myciclo.ui.screens.InicioScreen
 import com.example.myciclo.ui.screens.LoginScreen
+import com.example.myciclo.ui.screens.OnboardingScreen
 import com.example.myciclo.ui.screens.RegistroEvaScreen
 import com.example.myciclo.ui.screens.RegistroScreen
 import com.example.myciclo.viewmodel.InicioViewModel
+import com.example.myciclo.viewmodel.OnboardingViewModel
 import com.example.myciclo.viewmodel.RegistroViewModel
 import com.example.myciclo.ui.screens.BienvenidaScreen
 object Rutas {
     const val BIENVENIDA = "bienvenida"
+    const val ONBOARDING = "onboarding"
     const val LOGIN = "login"
     const val INICIO = "inicio"
     const val REGISTRO_DIARIO = "registro_diario"
@@ -41,7 +44,26 @@ fun Navigation(
         composable(Rutas.BIENVENIDA) {
             BienvenidaScreen(
                 onComenzar = {
-                    navController.navigate(Rutas.INICIO)
+                    navController.navigate(Rutas.ONBOARDING)
+                }
+            )
+        }
+
+        // ONBOARDING (5 pasos en una misma pantalla)
+        composable(Rutas.ONBOARDING) {
+
+            val onboardingViewModel: OnboardingViewModel = viewModel()
+
+            OnboardingScreen(
+                onboardingViewModel = onboardingViewModel,
+                onTerminar = {
+                    // Al terminar se quitan Bienvenida y Onboarding del historial:
+                    // con "atrás" desde Inicio no se vuelve al onboarding.
+                    navController.navigate(Rutas.INICIO) {
+                        popUpTo(Rutas.BIENVENIDA) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
