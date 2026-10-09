@@ -155,3 +155,38 @@ Cuando llegue el manual de marca, los tonos se ajustan solo en `Color.kt`.
 **Cómo probar:** ejecutar la app; los botones deben verse dorado oscuro y los títulos en Poppins.
 
 **Verificado:** `./gradlew :app:assembleDebug` compila sin errores.
+
+---
+
+## 2026-10-09 · Sistema visual MyCiclo (tarjeta Trello)
+
+**Objetivo:** aplicar el sistema visual de los mockups oficiales "myCiclo · Pantallas de la app" y dejar componentes reutilizables para todo el equipo. Reemplaza la paleta dorada y la fuente Poppins del 2026-10-08.
+
+**Archivos modificados (compartidos)**
+
+| Archivo | Cambio |
+|---|---|
+| `ui/theme/Color.kt` | Paleta oficial: morado marca `#2D055B`, morado suave `#F3EEF9`, rosado período `#D6457A`, violeta EVA `#6A4BA8`, lavanda `#EEE7F7`, dorado `#C4963C`, crema `#FBF7EE`, texto `#1E1430`, borde `#ECE6F1`, error, éxito y deshabilitado. Se mantuvieron los nombres anteriores (`MyCicloPrimary`, `MyCicloGold`, etc.) para no romper otras pantallas; `MyCicloPlum` pasó a llamarse `MyCicloEva`. |
+| `ui/theme/Theme.kt` | El esquema de Material usa la paleta nueva. Solo tema claro y **sin color dinámico** (el teléfono no cambia los colores de la app). |
+| `ui/theme/Type.kt` | **Outfit** para títulos (Light 34 bienvenida, 28 título de pantalla, Medium 17 título de tarjeta) y **DM Sans** para el texto (15 principal, 13 secundario, 11 etiquetas en mayúscula, 16 negrita en botones). |
+
+**Archivos nuevos**
+
+| Archivo | Para qué |
+|---|---|
+| `res/font/outfit_*.ttf`, `res/font/dmsans_*.ttf` | Fuentes del mockup (se eliminaron `poppins_*.ttf`). |
+| `ui/theme/Medidas.kt` | Medidas comunes: margen lateral 20 dp, separación 16 dp, radio de tarjeta 22 dp, botón 56 dp, chip 40 dp, área táctil 44 dp. |
+| `ui/components/Botones.kt` | `BotonPrincipal` (normal, deshabilitado, cargando) y `BotonSecundario`. |
+| `ui/components/Tarjetas.kt` | `TarjetaMyCiclo`: tarjeta con borde y fondo configurable. |
+| `ui/components/Chips.kt` | `ChipMyCiclo`: seleccionado = borde 2 dp + fondo suave + ✓, animado en 150 ms. Colores cambiables para período o EVA. |
+| `ui/components/Estados.kt` | `MensajeError` y `MensajeExito` con ícono y `AnimatedVisibility` de 200 ms. |
+| `ui/components/VistaPreviaComponentes.kt` | `@Preview` con todos los componentes, para revisarlos en Android Studio. |
+| `res/drawable/ic_check.xml` | Ícono ✓. |
+
+**Para el equipo:** Cristopher y Nicolas pueden usar estos componentes en sus pantallas (`BotonPrincipal`, `ChipMyCiclo`, `TarjetaMyCiclo`, `MensajeError`). No se tocó ninguna pantalla de ellos; solo cambian colores y letra porque vienen del tema.
+
+**Cómo probar**
+1. Abrir `VistaPreviaComponentes.kt` en Android Studio y ver la pestaña *Split*: deben verse los botones, chips, tarjetas y mensajes con los colores del mockup.
+2. Ejecutar la app en el emulador: los textos usan las fuentes nuevas y los botones son morados.
+
+**Verificado:** `./gradlew assembleDebug` y `./gradlew test` sin errores.

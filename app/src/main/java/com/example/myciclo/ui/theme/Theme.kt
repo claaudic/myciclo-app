@@ -5,25 +5,27 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+// Solo tema claro y sin color dinámico: la app siempre usa la paleta de myCiclo,
+// aunque el teléfono tenga otros colores de sistema.
 private val MyCicloColorScheme = lightColorScheme(
 
     primary = MyCicloPrimary,
     onPrimary = Color.White,
 
     primaryContainer = MyCicloPrimarySoft,
-    onPrimaryContainer = MyCicloText,
+    onPrimaryContainer = MyCicloPrimary,
 
     secondary = MyCicloPink,
     onSecondary = Color.White,
 
     secondaryContainer = MyCicloPinkSoft,
-    onSecondaryContainer = MyCicloText,
+    onSecondaryContainer = MyCicloPinkText,
 
-    tertiary = MyCicloGold,
+    tertiary = MyCicloEva,
     onTertiary = Color.White,
 
-    tertiaryContainer = MyCicloGoldSoft,
-    onTertiaryContainer = MyCicloText,
+    tertiaryContainer = MyCicloEvaSoft,
+    onTertiaryContainer = MyCicloEva,
 
     background = MyCicloBackground,
     onBackground = MyCicloText,
@@ -31,20 +33,22 @@ private val MyCicloColorScheme = lightColorScheme(
     surface = MyCicloSurface,
     onSurface = MyCicloText,
 
-    surfaceVariant = MyCicloSurfaceSoft,
+    surfaceVariant = MyCicloPrimarySoft,
     onSurfaceVariant = MyCicloTextSecondary,
 
     surfaceContainerLowest = MyCicloSurface,
-    surfaceContainerLow = MyCicloSurfaceSoft,
-    surfaceContainer = MyCicloSurfaceSoft,
-    surfaceContainerHigh = MyCicloSurfaceSoft,
+    surfaceContainerLow = MyCicloSurface,
+    surfaceContainer = MyCicloSurface,
+    surfaceContainerHigh = MyCicloSurface,
     surfaceContainerHighest = MyCicloPrimarySoft,
 
     outline = MyCicloBorder,
     outlineVariant = MyCicloBorder,
 
     error = MyCicloError,
-    onError = Color.White
+    onError = Color.White,
+    errorContainer = MyCicloErrorSoft,
+    onErrorContainer = MyCicloError
 )
 
 @Composable
