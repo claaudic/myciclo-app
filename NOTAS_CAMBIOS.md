@@ -96,3 +96,62 @@ Relación entre tablas: **por fecha**, sin claves foráneas. Un registro pertene
 3. Cada botón de Inicio debe abrir su pantalla, y "← Volver" (o el botón atrás del teléfono) debe volver a Inicio.
 
 **Verificado:** `./gradlew :app:assembleDebug` compila sin errores. Las reglas de utils se probaron con una prueba temporal (3/3 correctas).
+
+---
+
+## 2026-10-08 · Registro diario con MVVM, validaciones y guardado en Room
+
+**Objetivo:** que el formulario "Registro del día" guarde en la base de datos, con las validaciones fuera de la pantalla (MVVM), mensajes con ícono y una animación en los errores.
+
+### Archivos
+
+| Archivo | Cambio |
+|---|---|
+| `viewmodel/RegistroViewModel.kt` (nuevo) | `RegistroUiState` (datos del formulario + mensajes de error) en un `StateFlow`. Una función `onXChange` por campo y `guardar(onGuardado)`, que valida, guarda en Room y luego vuelve a Inicio. |
+| `utils/Validaciones.kt` | Se agregaron `MAX_SINTOMAS` (100), `MAX_BIOMARCADOR` (50), `MAX_NOTAS` (300), `validarLargoTexto()` y `validarFlujo()`. |
+| `ui/screens/RegistroScreen.kt` | Mismo diseño. La sección "Otro biomarcador" pasó a llamarse **"Otros síntomas · Opcional"** (más fácil de entender; en la base de datos sigue siendo `biomarcador`). Se quitaron los `remember { mutableStateOf }`: ahora muestra el `uiState` del ViewModel. El flujo usa el enum `Flujo`. Nuevos `CampoTexto` (borde rojo, ícono y mensaje de error) y `MensajeError` (aparece con `AnimatedVisibility`). El parámetro `onGuardar` pasó a llamarse `onGuardado`. |
+| `navigation/Navigation.kt` | La ruta `registro_diario` crea el `RegistroViewModel` con `viewModel()` y, al guardar, vuelve a Inicio. |
+| `data/room/CicloDao.kt` | `insertar` usa `OnConflictStrategy.IGNORE`: si ya hay un ciclo con esa fecha de inicio, no se duplica. |
+| `res/drawable/ic_error.xml` (nuevo) | Ícono de error (vector de Material), para no agregar la librería de íconos. |
+
+### Validaciones (se revisan al presionar "Guardar")
+
+| Campo | Regla |
+|---|---|
+| Formulario | Debe tener al menos un dato |
+| Flujo | Si "¿Comenzó tu período hoy?" = Sí, es obligatorio y no puede ser "Sin" |
+| Síntomas / otros síntomas / notas | Opcionales; máximo 100 / 50 / 300 caracteres |
+
+### Qué se guarda
+- Un `RegistroDiarioEntity` con la fecha de hoy. Si ya existía uno de hoy, se reemplaza (corregir).
+- Si "¿Comenzó tu período hoy?" = **Sí**, también se crea un ciclo con inicio hoy. Por eso Inicio pasa a mostrar el día 1.
+
+### También va en este commit
+Cambios anteriores sin commit: `BienvenidaScreen` y `LoginScreen` nuevas, rediseño de `RegistroScreen`, `Color.kt`, `Theme.kt` y `Navigation.kt`.
+
+**Cómo probar**
+1. Inicio → **Nuevo registro** → **Guardar** sin llenar nada: aparece el error con ícono.
+2. Elegir **Sí** y flujo **Sin** → Guardar: error de flujo. Elegir **Leve** y guardar de nuevo.
+3. Escribir más de 50 caracteres en "Otros síntomas" → Guardar: el campo queda en rojo con ícono.
+4. Con datos válidos, Guardar: vuelve a Inicio con el día 1. Cerrar y abrir la app: el dato sigue ahí.
+
+**Verificado:** `./gradlew :app:assembleDebug` compila sin errores. Falta probar en el emulador.
+
+---
+
+## 2026-10-08 · Paleta de colores de myciclo.cl y fuente Poppins
+
+**Objetivo:** que toda la app use los colores de la página de MyCiclo, como pidió Carolina. Se eligió la versión **"Blanco y dorado"**: fondo blanco y el dorado solo para lo importante.
+
+| Archivo | Cambio |
+|---|---|
+| `ui/theme/Color.kt` | Nuevos valores, con los mismos nombres (las pantallas no cambian): botones en dorado oscuro `#8A6A2C`, dorado de la web `#B68D40` para detalles, texto `#181210`, fondo blanco. Se agregaron `MyCicloPlum` (ciruela, para EVA) y `MyCicloBorder`. |
+| `ui/theme/Theme.kt` | `outline` y `outlineVariant` usan `MyCicloBorder`. |
+| `ui/theme/Type.kt` | Títulos (`headline`, `titleLarge`, `titleMedium`) en Poppins; el texto normal sigue en Roboto. |
+| `res/font/` (nuevo) | `poppins_medium.ttf`, `poppins_semibold.ttf`, `poppins_bold.ttf` (Google Fonts, licencia libre OFL). |
+
+Cuando llegue el manual de marca, los tonos se ajustan solo en `Color.kt`.
+
+**Cómo probar:** ejecutar la app; los botones deben verse dorado oscuro y los títulos en Poppins.
+
+**Verificado:** `./gradlew :app:assembleDebug` compila sin errores.
