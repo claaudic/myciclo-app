@@ -11,11 +11,15 @@ import com.example.myciclo.ui.screens.AprenderScreen
 import com.example.myciclo.ui.screens.CalendarioScreen
 import com.example.myciclo.ui.screens.HistorialScreen
 import com.example.myciclo.ui.screens.InicioScreen
+import com.example.myciclo.ui.screens.LoginScreen
 import com.example.myciclo.ui.screens.RegistroEvaScreen
 import com.example.myciclo.ui.screens.RegistroScreen
 import com.example.myciclo.viewmodel.InicioViewModel
-
+import com.example.myciclo.viewmodel.RegistroViewModel
+import com.example.myciclo.ui.screens.BienvenidaScreen
 object Rutas {
+    const val BIENVENIDA = "bienvenida"
+    const val LOGIN = "login"
     const val INICIO = "inicio"
     const val REGISTRO_DIARIO = "registro_diario"
     const val REGISTRO_EVA = "registro_eva"
@@ -25,50 +29,112 @@ object Rutas {
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController
+) {
 
     NavHost(
         navController = navController,
-        startDestination = Rutas.INICIO
-    ) {
+        startDestination = Rutas.BIENVENIDA
+    ){
+        //BIENVENIDA
+        composable(Rutas.BIENVENIDA) {
+            BienvenidaScreen(
+                onComenzar = {
+                    navController.navigate(Rutas.INICIO)
+                }
+            )
+        }
+        // LOGIN
+        composable(Rutas.LOGIN) {
+            LoginScreen(
+                onIngresar = {
+                    navController.navigate(Rutas.INICIO) {
+                        popUpTo(Rutas.LOGIN) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
 
+        // INICIO
         composable(Rutas.INICIO) {
+
             val inicioViewModel: InicioViewModel = viewModel()
             val uiState by inicioViewModel.uiState.collectAsState()
 
             InicioScreen(
                 diaDelCiclo = uiState.diaDelCiclo,
-                onNuevoRegistro = { navController.navigate(Rutas.REGISTRO_DIARIO) },
-                onRegistroEva = { navController.navigate(Rutas.REGISTRO_EVA) },
-                onCalendario = { navController.navigate(Rutas.CALENDARIO) },
-                onHistorial = { navController.navigate(Rutas.HISTORIAL) },
-                onAprender = { navController.navigate(Rutas.APRENDER) }
+                onNuevoRegistro = {
+                    navController.navigate(Rutas.REGISTRO_DIARIO)
+                },
+                onRegistroEva = {
+                    navController.navigate(Rutas.REGISTRO_EVA)
+                },
+                onCalendario = {
+                    navController.navigate(Rutas.CALENDARIO)
+                },
+                onHistorial = {
+                    navController.navigate(Rutas.HISTORIAL)
+                },
+                onAprender = {
+                    navController.navigate(Rutas.APRENDER)
+                }
             )
         }
 
-        // Por ahora usa la pantalla existente del compañero; se adaptará
-        // (sin Alto/Medio/Nulo ni día manual) al implementar el registro diario.
+        // REGISTRO DIARIO
         composable(Rutas.REGISTRO_DIARIO) {
+
+            val registroViewModel: RegistroViewModel = viewModel()
+
             RegistroScreen(
-                onVolver = { navController.popBackStack() },
-                onGuardar = { navController.popBackStack() }
+                registroViewModel = registroViewModel,
+                onVolver = {
+                    navController.popBackStack()
+                },
+                onGuardado = {
+                    // Vuelve a Inicio (aunque se presione "Guardar" dos veces).
+                    navController.popBackStack(Rutas.INICIO, inclusive = false)
+                }
             )
         }
 
+        // REGISTRO EVA
         composable(Rutas.REGISTRO_EVA) {
-            RegistroEvaScreen(onVolver = { navController.popBackStack() })
+            RegistroEvaScreen(
+                onVolver = {
+                    navController.popBackStack()
+                }
+            )
         }
 
+        // CALENDARIO
         composable(Rutas.CALENDARIO) {
-            CalendarioScreen(onVolver = { navController.popBackStack() })
+            CalendarioScreen(
+                onVolver = {
+                    navController.popBackStack()
+                }
+            )
         }
 
+        // HISTORIAL
         composable(Rutas.HISTORIAL) {
-            HistorialScreen(onVolver = { navController.popBackStack() })
+            HistorialScreen(
+                onVolver = {
+                    navController.popBackStack()
+                }
+            )
         }
 
+        // APRENDER
         composable(Rutas.APRENDER) {
-            AprenderScreen(onVolver = { navController.popBackStack() })
+            AprenderScreen(
+                onVolver = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
