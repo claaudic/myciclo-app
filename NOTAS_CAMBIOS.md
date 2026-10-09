@@ -190,3 +190,27 @@ Cuando llegue el manual de marca, los tonos se ajustan solo en `Color.kt`.
 2. Ejecutar la app en el emulador: los textos usan las fuentes nuevas y los botones son morados.
 
 **Verificado:** `./gradlew assembleDebug` y `./gradlew test` sin errores.
+
+---
+
+## 2026-10-09 · Bienvenida (tarjeta Trello)
+
+**Objetivo:** dejar la pantalla de Bienvenida igual al mockup oficial, usando el sistema visual nuevo.
+
+**Archivos**
+
+| Archivo | Cambio |
+|---|---|
+| `ui/screens/BienvenidaScreen.kt` | Reescrito según el mockup: logo "myCiclo" ("my" rosado, "Ciclo" morado), etiqueta "HECHO EN CHILE", ilustración del ciclo hecha con `Canvas` (círculo fino con arco dorado, anillo con arcos rosado y violeta, gota al centro), título "Conoce tu ciclo, a tu manera", descripción, `BotonPrincipal` "Comenzar" y mensaje de privacidad con candado. Se agregó `@Preview`. |
+| `res/drawable/ic_candado.xml` | Ícono de candado (nuevo). |
+| `res/drawable/ic_gota.xml` | Ícono de gota del período (nuevo; también servirá en Hoy). |
+
+**Adaptabilidad:** la ilustración está dentro de un `Box` con `weight(1f)`: usa el espacio que sobra y se achica en pantallas bajas, así el botón y el mensaje de privacidad siempre se ven. Probado en el emulador a 1080×2400 y simulando una pantalla de 1080×1600.
+
+**Pendiente:** "Comenzar" sigue llevando a Inicio. Pasará al Onboarding en la tarjeta *Onboarding · Paso 1*, cuando exista esa pantalla (así esta tarjeta no toca `Navigation.kt`).
+
+**Cómo probar**
+1. Ejecutar la app (Run ▶): la primera pantalla debe verse como el mockup `1 · Bienvenida`.
+2. En Android Studio, abrir `BienvenidaScreen.kt` → *Split* para ver la vista previa.
+
+**Verificado:** `./gradlew assembleDebug` y `./gradlew test` sin errores.

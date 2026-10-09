@@ -1,358 +1,255 @@
 package com.example.myciclo.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myciclo.R
+import com.example.myciclo.ui.components.BotonPrincipal
+import com.example.myciclo.ui.theme.Medidas
+import com.example.myciclo.ui.theme.MyCicloBorder
 import com.example.myciclo.ui.theme.MyCicloGold
-import com.example.myciclo.ui.theme.MyCicloText
+import com.example.myciclo.ui.theme.MyCicloGoldSoft
+import com.example.myciclo.ui.theme.MyCicloGoldText
+import com.example.myciclo.ui.theme.MyCicloPink
+import com.example.myciclo.ui.theme.MyCicloPrimary
+import com.example.myciclo.ui.theme.MyCicloPrimarySoft
 import com.example.myciclo.ui.theme.MyCicloTextSecondary
+import com.example.myciclo.ui.theme.MyCicloTheme
+
+// Violeta claro del arco de la ilustración (solo decorativo)
+private val VioletaClaro = Color(0xFFB8A6DE)
 
 @Composable
 fun BienvenidaScreen(
     onComenzar: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(
-                start = 22.dp,
-                end = 22.dp,
-                top = 24.dp,
-                bottom = 22.dp
-            )
+            .padding(horizontal = Medidas.margenLateral, vertical = 24.dp)
     ) {
 
-        // CABECERA
+        // CABECERA: logo y "HECHO EN CHILE"
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            LogoMyCiclo()
 
-            Text(
-                text = "myCiclo",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Normal,
-                color = MyCicloText
-            )
-
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
+            Spacer(modifier = Modifier.weight(1f))
 
             Text(
                 text = "HECHO EN CHILE",
-                fontSize = 9.sp,
-                fontWeight = FontWeight.Medium,
-                color = MyCicloGold
+                style = MaterialTheme.typography.labelSmall,
+                color = MyCicloGoldText,
+                modifier = Modifier
+                    .background(MyCicloGoldSoft, CircleShape)
+                    .border(BorderStroke(1.dp, MyCicloGold.copy(alpha = 0.4f)), CircleShape)
+                    .padding(horizontal = 14.dp, vertical = 7.dp)
             )
         }
 
-        Spacer(
-            modifier = Modifier.height(48.dp)
-        )
-
-        // ILUSTRACIÓN
+        // ILUSTRACIÓN: ocupa el espacio que sobra, así se achica en pantallas bajas
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-
-            CicloVisual()
+            IlustracionCiclo(
+                modifier = Modifier
+                    .widthIn(max = 260.dp)
+                    .aspectRatio(1f)
+            )
         }
-
-        Spacer(
-            modifier = Modifier.height(34.dp)
-        )
 
         // TÍTULO
         Text(
             text = "Conoce tu ciclo,\na tu manera",
             modifier = Modifier.fillMaxWidth(),
-            fontSize = 32.sp,
-            lineHeight = 39.sp,
-            fontWeight = FontWeight.Normal,
-            color = MyCicloText,
+            style = MaterialTheme.typography.displaySmall,
+            color = MyCicloPrimary,
             textAlign = TextAlign.Center
         )
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
+        Spacer(modifier = Modifier.height(12.dp))
 
         // DESCRIPCIÓN
         Text(
-            text = "Un espacio para escucharte, registrar lo que\nsientes y reconocer tus propios patrones.",
+            text = "Registra cómo te sientes, observa tus patrones y, si quieres, acompáñalo con EVA.",
             modifier = Modifier.fillMaxWidth(),
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
+            style = MaterialTheme.typography.bodyLarge,
             color = MyCicloTextSecondary,
             textAlign = TextAlign.Center
         )
 
-        // Empuja el botón hacia abajo
-        Spacer(
-            modifier = Modifier.weight(1f)
+        Spacer(modifier = Modifier.height(32.dp))
+
+        BotonPrincipal(
+            texto = "Comenzar",
+            onClick = onComenzar
         )
 
-        // BOTÓN PRINCIPAL
-        Button(
-            onClick = onComenzar,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MyCicloGold,
-                contentColor = MyCicloText
-            )
-        ) {
-
-            Text(
-                text = "Comenzar",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+        Spacer(modifier = Modifier.height(Medidas.separacion))
 
         // PRIVACIDAD
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            horizontalArrangement = Arrangement.Start
         ) {
-
-            Text(
-                text = "♡",
-                color = MyCicloGold,
-                fontSize = 16.sp
+            Icon(
+                painter = painterResource(R.drawable.ic_candado),
+                contentDescription = null,
+                tint = MyCicloTextSecondary,
+                modifier = Modifier.size(18.dp)
             )
 
-            Spacer(
-                modifier = Modifier.size(8.dp)
-            )
+            Spacer(modifier = Modifier.width(10.dp))
 
             Text(
-                text = "Tu información personal es privada y permanece en tu dispositivo. Sin crear una cuenta.",
-                modifier = Modifier.weight(1f),
-                fontSize = 11.sp,
-                lineHeight = 16.sp,
+                text = "Tus datos se guardan solo en este teléfono. No necesitas crear una cuenta.",
+                style = MaterialTheme.typography.bodySmall,
                 color = MyCicloTextSecondary
             )
         }
     }
 }
 
+// "my" en rosado y "Ciclo" en morado, como en el mockup.
 @Composable
-private fun CicloVisual() {
+private fun LogoMyCiclo() {
+    Text(
+        text = buildAnnotatedString {
+            withStyle(SpanStyle(color = MyCicloPink)) {
+                append("my")
+            }
+            withStyle(SpanStyle(color = MyCicloPrimary)) {
+                append("Ciclo")
+            }
+        },
+        style = MaterialTheme.typography.headlineMedium,
+        fontSize = 30.sp
+    )
+}
 
+// Ilustración del ciclo hecha con Canvas (sin imágenes):
+// un círculo fino con un arco dorado, un anillo con arcos rosado y violeta,
+// y al centro un círculo crema con la gota del período.
+@Composable
+private fun IlustracionCiclo(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.size(245.dp),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val centro = Offset(size.width / 2, size.height / 2)
+            val radioExterior = size.width * 0.48f
+            val radioAnillo = size.width * 0.37f
+            val grosorAnillo = size.width * 0.06f
 
-        Canvas(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            val center = Offset(
-                x = size.width / 2,
-                y = size.height / 2
-            )
-
-            // CÍRCULO EXTERIOR
+            // Círculo exterior fino
             drawCircle(
-                color = MyCicloGold.copy(alpha = 0.20f),
-                radius = size.width * 0.46f,
-                center = center,
-                style = Stroke(
-                    width = 1.2.dp.toPx()
-                )
+                color = MyCicloBorder,
+                radius = radioExterior,
+                center = centro,
+                style = Stroke(width = 1.5.dp.toPx())
             )
 
-            // SEGUNDO CÍRCULO
-            drawCircle(
-                color = MyCicloGold.copy(alpha = 0.28f),
-                radius = size.width * 0.37f,
-                center = center,
-                style = Stroke(
-                    width = 1.2.dp.toPx()
-                )
-            )
-
-            // FONDO CENTRAL
-            drawCircle(
-                color = Color.White.copy(alpha = 0.75f),
-                radius = size.width * 0.28f,
-                center = center
-            )
-
-            // PUNTO DORADO
+            // Arco dorado de arriba hacia la derecha, con un punto al final
+            dibujarArco(MyCicloGold, radioExterior, -90f, 90f, 2.dp.toPx())
             drawCircle(
                 color = MyCicloGold,
-                radius = 6.dp.toPx(),
-                center = Offset(
-                    x = size.width * 0.86f,
-                    y = size.height * 0.28f
-                )
+                radius = 5.dp.toPx(),
+                center = Offset(centro.x + radioExterior, centro.y)
             )
 
-            // PUNTO SECUNDARIO
+            // Anillo morado suave y sus dos arcos
             drawCircle(
-                color = MyCicloTextSecondary.copy(alpha = 0.65f),
-                radius = 4.dp.toPx(),
-                center = Offset(
-                    x = size.width * 0.07f,
-                    y = size.height * 0.76f
-                )
+                color = MyCicloPrimarySoft,
+                radius = radioAnillo,
+                center = centro,
+                style = Stroke(width = grosorAnillo)
             )
+            dibujarArco(MyCicloPink, radioAnillo, -92f, 60f, grosorAnillo)
+            dibujarArco(VioletaClaro, radioAnillo, 25f, 85f, grosorAnillo)
 
-            // HOJA IZQUIERDA
-            val hojaIzquierda = Path().apply {
-
-                moveTo(
-                    size.width * 0.50f,
-                    size.height * 0.57f
-                )
-
-                cubicTo(
-                    size.width * 0.39f,
-                    size.height * 0.58f,
-                    size.width * 0.31f,
-                    size.height * 0.50f,
-                    size.width * 0.29f,
-                    size.height * 0.40f
-                )
-
-                cubicTo(
-                    size.width * 0.41f,
-                    size.height * 0.40f,
-                    size.width * 0.49f,
-                    size.height * 0.47f,
-                    size.width * 0.50f,
-                    size.height * 0.57f
-                )
-
-                close()
-            }
-
-            drawPath(
-                path = hojaIzquierda,
-                color = MyCicloGold,
-                style = Stroke(
-                    width = 2.dp.toPx()
-                )
-            )
-
-            // NERVADURA
-            drawLine(
-                color = MyCicloGold,
-                start = Offset(
-                    x = size.width * 0.30f,
-                    y = size.height * 0.42f
-                ),
-                end = Offset(
-                    x = size.width * 0.50f,
-                    y = size.height * 0.57f
-                ),
-                strokeWidth = 1.3.dp.toPx()
-            )
-
-            // HOJA DERECHA
-            val hojaDerecha = Path().apply {
-
-                moveTo(
-                    size.width * 0.51f,
-                    size.height * 0.49f
-                )
-
-                cubicTo(
-                    size.width * 0.51f,
-                    size.height * 0.36f,
-                    size.width * 0.60f,
-                    size.height * 0.28f,
-                    size.width * 0.69f,
-                    size.height * 0.22f
-                )
-
-                cubicTo(
-                    size.width * 0.70f,
-                    size.height * 0.36f,
-                    size.width * 0.62f,
-                    size.height * 0.45f,
-                    size.width * 0.51f,
-                    size.height * 0.49f
-                )
-
-                close()
-            }
-
-            drawPath(
-                path = hojaDerecha,
-                color = MyCicloGold,
-                style = Stroke(
-                    width = 2.dp.toPx()
-                )
-            )
-
-            drawLine(
-                color = MyCicloGold,
-                start = Offset(
-                    x = size.width * 0.52f,
-                    y = size.height * 0.47f
-                ),
-                end = Offset(
-                    x = size.width * 0.67f,
-                    y = size.height * 0.26f
-                ),
-                strokeWidth = 1.3.dp.toPx()
+            // Círculo crema del centro
+            drawCircle(
+                color = MyCicloGoldSoft,
+                radius = size.width * 0.25f,
+                center = centro
             )
         }
 
-        // FRASE PEQUEÑA
-        Text(
-            text = "CADA CICLO ES TUYO",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(50.dp)
-                )
-                .padding(
-                    horizontal = 14.dp,
-                    vertical = 5.dp
-                ),
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Medium,
-            color = MyCicloGold
+        Icon(
+            painter = painterResource(R.drawable.ic_gota),
+            contentDescription = null,
+            tint = MyCicloPink,
+            modifier = Modifier.fillMaxSize(0.24f)
         )
+    }
+}
+
+// Dibuja un arco con puntas redondas. Los ángulos parten en las 3 en punto (0°)
+// y avanzan como el reloj; -90° es arriba.
+private fun DrawScope.dibujarArco(
+    color: Color,
+    radio: Float,
+    inicio: Float,
+    recorrido: Float,
+    grosor: Float
+) {
+    drawArc(
+        color = color,
+        startAngle = inicio,
+        sweepAngle = recorrido,
+        useCenter = false,
+        topLeft = Offset(size.width / 2 - radio, size.height / 2 - radio),
+        size = Size(radio * 2, radio * 2),
+        style = Stroke(width = grosor, cap = StrokeCap.Round)
+    )
+}
+
+@Preview(showBackground = true, heightDp = 800)
+@Composable
+fun VistaPreviaBienvenida() {
+    MyCicloTheme {
+        BienvenidaScreen(onComenzar = {})
     }
 }
