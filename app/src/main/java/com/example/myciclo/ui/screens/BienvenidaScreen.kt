@@ -31,15 +31,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.myciclo.R
 import com.example.myciclo.ui.components.BotonPrincipal
+import com.example.myciclo.ui.components.LogoMyCiclo
 import com.example.myciclo.ui.theme.Medidas
 import com.example.myciclo.ui.theme.MyCicloBorder
 import com.example.myciclo.ui.theme.MyCicloGold
@@ -149,23 +146,6 @@ fun BienvenidaScreen(
             )
         }
     }
-}
-
-// "my" en rosado y "Ciclo" en morado, como en el mockup.
-@Composable
-private fun LogoMyCiclo() {
-    Text(
-        text = buildAnnotatedString {
-            withStyle(SpanStyle(color = MyCicloPink)) {
-                append("my")
-            }
-            withStyle(SpanStyle(color = MyCicloPrimary)) {
-                append("Ciclo")
-            }
-        },
-        style = MaterialTheme.typography.headlineMedium,
-        fontSize = 30.sp
-    )
 }
 
 // Ilustración del ciclo hecha con Canvas (sin imágenes):
