@@ -248,3 +248,40 @@ Cuando llegue el manual de marca, los tonos se ajustan solo en `Color.kt`.
 5. Botón atrás del teléfono → vuelve al Paso 1 con la selección intacta.
 
 **Verificado:** `./gradlew assembleDebug` y `./gradlew test` (5 pruebas nuevas) sin errores.
+
+---
+
+## 2026-10-09 · Onboarding · Paso 2 (tarjeta Trello)
+
+**Objetivo:** "¿Cuándo comenzó tu último período?" con calendario que bloquea fechas futuras y opción "No lo recuerdo". Se trabaja en la rama `onboarding`.
+
+**Archivos nuevos**
+
+| Archivo | Para qué |
+|---|---|
+| `utils/Fechas.kt` | `formatearFechaLarga` ("Sábado 26 de septiembre") y conversión entre `LocalDate` y los milisegundos UTC que usa el `DatePicker`. |
+| `res/drawable/ic_atras.xml`, `ic_info.xml` | Flecha para volver e ícono de información. |
+| `ui/components/EnEspanol.kt` | Muestra su contenido en español de Chile aunque el teléfono esté en otro idioma. Se usa en el paso 2 para que el calendario tenga meses y días en español y la semana empiece el lunes. |
+
+**Archivos modificados**
+
+| Archivo | Cambio |
+|---|---|
+| `viewmodel/OnboardingViewModel.kt` | `OnboardingUiState` agrega `fechaUltimoPeriodo` y `noRecuerdaPeriodo`. En el paso 2, "Continuar" se habilita solo con fecha. `onFechaUltimoPeriodoChange` ignora fechas futuras (usa `esFechaFutura` de `utils/Validaciones.kt`, sin modificarlo). `onNoRecuerdoPeriodo` avanza sin fecha. |
+| `ui/screens/OnboardingScreen.kt` | Paso 2: tarjeta con la fecha elegida en rosado + `DatePicker` de Material 3 con `selectableDates` (días posteriores a hoy deshabilitados) y colores de myCiclo; texto explicativo con ícono; botón "No lo recuerdo". Desde el paso 2 la cabecera muestra una flecha para volver (con `contentDescription`). La fecha elegida se pasa al ViewModel con `LaunchedEffect`. |
+| `ui/components/Tarjetas.kt` | `TarjetaMyCiclo` acepta `relleno` (por defecto 18 dp) para que el calendario tenga más ancho. |
+| `test/.../OnboardingViewModelTest.kt` | 4 pruebas nuevas del paso 2 (sin fecha no avanza, fecha pasada sí, fecha futura se ignora, "No lo recuerdo" avanza sin fecha). Total: 9. |
+
+**Guardar selección:** la fecha queda en el `OnboardingUiState` (si se vuelve atrás y adelante, sigue marcada). Se guardará en Room al terminar el onboarding (tarjeta *Integración Room*), como un `CicloEntity`. Si eligió "No lo recuerdo" no se guarda ciclo y Hoy mostrará "Sin período" (tarjeta *Pantalla Hoy · Estados especiales*).
+
+**Idioma del calendario:** el `DatePicker` usa el idioma del teléfono. Como el emulador está en inglés, el paso 2 se envuelve en `EnEspanol { }` para que siempre salga en español ("Octubre de 2026", L M M J V S D).
+
+**Cómo probar**
+1. Paso 1 → elegir una opción → Continuar.
+2. Paso 2: "Continuar" está gris hasta elegir un día.
+3. Los días posteriores a hoy se ven grises y no se pueden tocar.
+4. Al tocar un día pasado, la tarjeta rosada muestra la fecha (ej. "Lunes 5 de octubre").
+5. Flecha ← o botón atrás → vuelve al paso 1. Continuar → el día sigue marcado.
+6. "No lo recuerdo" → pasa al paso 3 sin fecha.
+
+**Verificado:** `./gradlew assembleDebug` y `./gradlew test` (9 pruebas) sin errores.
