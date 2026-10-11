@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myciclo.data.room.ResultadoEva
 import com.example.myciclo.ui.components.BotonPrincipal
+import com.example.myciclo.ui.components.CamaraEva
 import com.example.myciclo.ui.components.TarjetaMyCiclo
 import com.example.myciclo.ui.theme.Medidas
 import com.example.myciclo.ui.theme.MyCicloBorder
@@ -49,11 +50,11 @@ data class ObservacionEvaUi(val hora: String, val resultado: ResultadoEva)
 @Composable
 fun RegistroEvaScreen(
     onVolver: () -> Unit,
-    onTomarFoto: (() -> Unit)? = null,
-    onGuardar: ((ResultadoEva) -> Unit)? = null,
+    onGuardar: ((ResultadoEva, String?) -> Unit)? = null,
     observacionesHoy: List<ObservacionEvaUi> = emptyList()
 ) {
     var seleccion by rememberSaveable { mutableStateOf<String?>(null) }
+    var rutaFoto by rememberSaveable { mutableStateOf<String?>(null) }
     val resultado = when (seleccion) {
         "CON_HELECHOS" -> ResultadoEva.CON_HELECHOS
         "SIN_HELECHOS" -> ResultadoEva.SIN_HELECHOS
@@ -128,27 +129,10 @@ fun RegistroEvaScreen(
         ) {
             Column(
                 modifier = Modifier.padding(22.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text("Vista previa · Cámara frontal", color = Color.White)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(140.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        "◎\nCentra la muestra en el círculo",
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-                OutlinedButton(onClick = { onTomarFoto?.invoke() }, enabled = onTomarFoto != null) {
-                    Text("Tomar foto")
-                }
-                Text("Puedes continuar sin fotografía.", color = Color.LightGray,
-                    style = MaterialTheme.typography.bodySmall)
+                CamaraEva(onFotoSeleccionada = { rutaFoto = it })
             }
         }
 
@@ -193,7 +177,7 @@ fun RegistroEvaScreen(
         }
         BotonPrincipal(
             texto = "Guardar observación",
-            onClick = { resultado?.let { onGuardar?.invoke(it) } },
+            onClick = { resultado?.let { onGuardar?.invoke(it, rutaFoto) } },
             habilitado = resultado != null && onGuardar != null
         )
         Text(

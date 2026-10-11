@@ -37,6 +37,13 @@ android {
 }
 
 dependencies {
+    // Camara EVA - CameraX 1.6.1
+    implementation("androidx.camera:camera-core:1.6.1")
+    implementation("androidx.camera:camera-camera2:1.6.1")
+    implementation("androidx.camera:camera-lifecycle:1.6.1")
+    implementation("androidx.camera:camera-view:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
+
     // Room (persistencia local SQLite)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
